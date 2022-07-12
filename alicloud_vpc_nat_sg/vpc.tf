@@ -1,9 +1,13 @@
-variable "name" {
+variable "natname" {
   default = "natGatewayExampleName"
 }
 
+variable "swname" {
+  default = "vswitchExampleName"
+}
+
 resource "alicloud_vpc" "vpc" {
-  vpc_name   = var.name
+  vpc_name   = var.vpc_name
   cidr_block = "10.0.0.0/8"
 }
 
@@ -11,7 +15,7 @@ data "alicloud_enhanced_nat_available_zones" "enhanced" {
 }
 
 resource "alicloud_vswitch" "enhanced" {
-  vswitch_name = var.name
+  vswitch_name = var.swname
   zone_id      = data.alicloud_enhanced_nat_available_zones.enhanced.zones.0.zone_id
   cidr_block   = "10.10.0.0/20"
   vpc_id       = alicloud_vpc.vpc.id
@@ -20,7 +24,7 @@ resource "alicloud_vswitch" "enhanced" {
 resource "alicloud_nat_gateway" "enhanced" {
   depends_on       = [alicloud_vswitch.enhanced]
   vpc_id           = alicloud_vpc.vpc.id
-  nat_gateway_name = var.name
+  nat_gateway_name = var.natname
   payment_type     = "PayAsYouGo"
   vswitch_id       = alicloud_vswitch.enhanced.id
   nat_type         = "Enhanced"
@@ -65,17 +69,18 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
 
 resource "alicloud_instance" "instance" {
 
-  security_groups   = alicloud_security_group.group.*.id
+  security_groups = alicloud_security_group.group.*.id
 
   # series III
-  instance_type              = "ecs.n4.large"
-  password = "PassWOrd123!"
-  system_disk_category       = "cloud_efficiency"
-  system_disk_name           = "system_disk"
-  system_disk_description    = "system_disk"
-  image_id                   = data.alicloud_images.images_ds.images.0.id
-  instance_name              = "foo"
-  vswitch_id                 = alicloud_vswitch.enhanced.id
+  instance_type           = "ecs.n4.large"
+  password                = "PassWOrd123!"
+  system_disk_category    = "cloud_efficiency"
+  system_disk_name        = "system_disk"
+  system_disk_description = "system_disk"
+  image_id                = data.alicloud_images.images_ds.images.0.id
+  instance_name           = "foo"
+  vswitch_id              = alicloud_vswitch.enhanced.id
+  user_data               = file("${path.module}/userdata.sh")
   # Setting "internet_max_bandwidth_out" larger than 0 can allocate a public ip address for an instance.
   # internet_max_bandwidth_out = 10
 }

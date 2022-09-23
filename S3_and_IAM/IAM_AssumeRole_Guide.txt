@@ -6,7 +6,7 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws-cn:iam::1234567890:root"
+                "AWS": "arn:aws-cn:iam::1234567890:root" # if no condition below, then root means every user or role in this account can invoke it
             },
             "Action": "sts:AssumeRole",
             "Condition": {

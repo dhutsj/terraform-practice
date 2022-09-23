@@ -1,0 +1,44 @@
+How to use withAWS with credentials or AssumeRole
+
+1. Install the AWS Jenkins plugin https://github.com/jenkinsci/pipeline-aws-plugin#withaws 
+
+2. There are two way to do authorization from Jenkins agent to AWS, 
+
+One way is using Jenkins credentials, store the AK/SK. Then use
+
+pipeline {
+    agent any
+    stages {
+        stage('hello AWS') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                    sh 'echo "hello KB">hello.txt'
+                    s3Upload acl: 'Private', bucket: 'kb-bucket', file: 'hello.txt'
+                    s3Download bucket: 'kb-bucket', file: 'downloadedHello.txt', path: 'hello.txt'
+                    sh 'cat downloadedHello.txt'
+                }
+            }
+        }
+    }
+}
+
+Another way is running on an EC2 machine attached to the role you need. Then AssumeRole for any role you need.
+
+pipeline {
+    agent any
+    stages {
+        stage('hello AWS') {
+            steps {
+                withAWS(role:'role-name', roleAccount:'roleAccount', externalId: 'roleExternalId', duration: 900, roleSessionName: 'jenkins-session') {
+                    sh 'echo "hello KB">hello.txt'
+                    s3Upload acl: 'Private', bucket: 'kb-bucket', file: 'hello.txt'
+                    s3Download bucket: 'kb-bucket', file: 'downloadedHello.txt', path: 'hello.txt'
+                    sh 'cat downloadedHello.txt'
+                }
+            }
+        }
+    }
+}
+
+Reference link: https://docs.cloudbees.com/docs/cloudbees-ci-kb/latest/client-and-managed-masters/how-to-authenticate-to-aws-with-the-pipeline-aws-plugin
+

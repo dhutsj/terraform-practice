@@ -3,6 +3,7 @@ resource "aws_launch_template" "example" {
   image_id      = data.aws_ami.example.id
   instance_type = "t2.micro"
   user_data     = filebase64("${path.module}/example.sh")
+  key_name      = "cn_nonprod_tsj"
   network_interfaces {
     security_groups = [aws_security_group.allow_alb.id]
   }

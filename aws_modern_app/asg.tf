@@ -12,8 +12,8 @@ resource "aws_launch_template" "example" {
 resource "aws_autoscaling_group" "bar" {
   vpc_zone_identifier = [var.private_subnet1_id, var.private_subnet2_id]
   desired_capacity    = 2
-  max_size            = 2
-  min_size            = 2
+  max_size            = 3
+  min_size            = 1
   target_group_arns   = [aws_lb_target_group.test.arn]
 
 

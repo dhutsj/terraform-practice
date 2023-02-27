@@ -3,7 +3,7 @@
 
 #### Introduction
 -----
-I get the inspiration by F5 Nginx's MARA project [link](https://github.com/nginxinc/kic-reference-architectures). In this project, there are some points very make sense. 
+I get the inspiration by F5 Nginx's [MARA project](https://github.com/nginxinc/kic-reference-architectures). In this project, there are some points very make sense.
 
 A modern app should be driven by at least four characteristics: scalability, portability, resiliency, and agility.
 

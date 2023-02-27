@@ -25,4 +25,8 @@ Second step is to use `CasC` like `Ansible` or `Puppet`.
 #### CI/CD
 The real application code is sitting in [python_demo_app](https://github.com/dhutsj/python_demo). I have pushed the image to dockerhub.
 
-But for CI, you can use CI tools like `Jenkins`/`GitHub Action` to build the source code into a docker image, just need to modify the docker image tag, like from v1 to v2.
+For CI, you can use CI tools like `Jenkins`/`GitHub Action` to build the source code into a docker image.
+
+For CD, you can still use `Jenkins`/`GitHub Action` or `ArgoCD` if you implement `GitOps`.
+
+There is no right or wrong which tool you use, just choose the one most situable for you.

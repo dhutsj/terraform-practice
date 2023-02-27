@@ -12,9 +12,17 @@ In AWS, we use `ASG + CloudWatch` or `EKS HPA` for scalability, use `multi-az` o
 
 #### How to
 -----
+#### IaC
 First step is to do IaC, if your company has multi-cloud, AWS, Alicloud, Azure, GCP, etc. `Terraform` is a good choice, `pulumi` is also good, but may not that mature now.
 
 I have done an example in this folder with terraform(.tf files).
 
 Second step is to use `CasC` like `Ansible` or `Puppet`.
 
+1. Modify the `terraform.tfvars` file according to your AWS VPC settings.
+2. Run `terraform init`, `terraform plan` and `terraform apply` to apply these AWS infrastructures.
+
+#### CI/CD
+The real application code is sitting in [python_demo_app](https://github.com/dhutsj/python_demo). I have pushed the image to dockerhub.
+
+But for CI, you can use CI tools like `Jenkins`/`GitHub Action` to build the source code into a docker image, just need to modify the docker image tag, like from v1 to v2.
